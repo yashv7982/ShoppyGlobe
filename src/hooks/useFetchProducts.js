@@ -1,30 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 const useFetchProducts = () => {
-  const [products, setProducts] = useState([])
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://dummyjson.com/products')
+        const response = await fetch(`${apiUrl}/products`);
         if (!response.ok) {
-          throw new Error('Failed to fetch products')
+          throw new Error('Failed to fetch products');
         }
-        const data = await response.json()
-        // data.products is an array
-        setProducts(data.products)
+        const data = await response.json();
+        setProducts(data);
       } catch (err) {
-        setError(err.message)
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchData()
-  }, [])
+    };
 
-  return { products, error, loading }
-}
+    fetchData();
+  }, [apiUrl]);
 
-export default useFetchProducts
+  return { products, error, loading };
+};
+
+export default useFetchProducts;
